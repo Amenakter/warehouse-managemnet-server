@@ -75,21 +75,6 @@ async function run() {
             res.send(result)
         })
 
-        app.delete("/addedItems/:id", async (req, res) => {
-            const deleteItem = req.params.id;
-            const query = { _id: ObjectId(deleteItem) }
-            const result = await MyCollection.deleteOne(query)
-            res.send(result);
-        })
-
-        // myItems
-        app.get('/addedItems', async (req, res) => {
-            const email = req.query.email;
-            const query = { email: email };
-            const cursor = MyCollection.find(query);
-            const result = await cursor.toArray();
-            res.send(result);
-        })
         //----------------------------------------------- 
         //Quantity updated
         app.put('/book/:id', async (req, res) => {
