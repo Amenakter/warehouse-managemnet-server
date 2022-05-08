@@ -36,6 +36,22 @@ async function run() {
             res.send(result)
         })
 
+        // insert inventories
+        app.post('/book', async (req, res) => {
+            const newBook = req.body;
+            const result = await bookCollection.insertOne(newBook);
+            res.send(result)
+        })
+
+        // delete manageinventories
+        app.delete("/book/:id", async (req, res) => {
+            const deletedBookId = req.params.id;
+            const query = { _id: ObjectId(deletedBookId) }
+            const result = await bookCollection.deleteOne(query)
+            res.send(result);
+        })
+
+
 
     }
     finally {
