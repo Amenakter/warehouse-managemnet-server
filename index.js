@@ -1,8 +1,9 @@
 const express = require('express');
 const app = express();
+const jsonwebtoken = require('jsonwebtoken');
 const cors = require('cors');
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 
 
@@ -17,14 +18,21 @@ async function run() {
     try {
         await client.connect();
         const bookCollection = client.db("Books").collection("collections");
-        const user = { name: "Amena Akter", email: "amenakter27@gmail.com" };
-        const result = await bookCollection.insertOne(user);
-        console.log(result);
+        const MyCollection = client.db("Books").collection("myItems");
 
-        app.get('/user', async (req, res) => {
+        // inventory item load
+        app.get('/book', async (req, res) => {
             const query = {};
             const cursor = bookCollection.find(query);
             const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        // go update and restock inventory
+        app.get('/book/:id', async (req, res) => {
+            const findId = (req.params.id);
+            const search = { _id: ObjectId(findId) }
+            const result = await bookCollection.findOne(search);
             res.send(result)
         })
 
